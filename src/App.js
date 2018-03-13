@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {Provider, View, Text} from 'react-native';
+import {Provider} from 'react-redux';
 import firebase from 'firebase';
-import {creatStore} from 'redux';
-import reducers from './reudcers';
+import {createStore} from 'redux';
+import reducers from './reducers';
 import firebaseData from '../secrets';
 import LoginForm from './components/LoginForm';
 
@@ -12,9 +12,9 @@ class App extends Component {
   }
   render () {
     return (
-      <Provider store={creatStore(reducers)}>
+      <Provider store={createStore(reducers)}>
         <LoginForm />
-      </Provider>
+       </Provider>
     )
   }
 
