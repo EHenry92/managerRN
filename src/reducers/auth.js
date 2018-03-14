@@ -8,7 +8,7 @@ const defaultState = {
 export default (state = defaultState, action) => {
   switch (action.type) {
     case EMAIL_CHANGE:
-      return {...state, password: action.email};
+      return {...state, email: action.email};
     case PASS_CHANGE:
       return {...state, password: action.password};
     default:
