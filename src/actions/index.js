@@ -1,5 +1,6 @@
-import {EMAIL_CHANGE, PASS_CHANGE} from './types';
+import {EMAIL_CHANGE, PASS_CHANGE, LOGIN_USER, LOGIN_FAIL} from './types';
 import firebase from 'firebase';
+
 export const emailChanged = (email) => {
   return {
     type: EMAIL_CHANGE,
@@ -12,9 +13,28 @@ export const passChanged = (password) => ({
   password
 });
 
+export const loginIn = (user) => ({
+  type: LOGIN_USER,
+  user
+});
+
+export const showErr = (err) => ({
+  type: LOGIN_FAIL,
+  err
+})
+
 export const loginUser = ({email, password}) => dispatch => {
   firebase.auth().signInWithEmailAndPassword(email, password)
-  .then(user => {
-    dispatch({type: 'LOGIN_USER_SUCCESS', user});
-  });
+  .then(user =>
+    dispatch(loginIn(user))
+  )
+  .catch(() => {
+    throw firebase.auth().createUserWithEmailAndPassword(email, password)
+  })
+  .then(newUser =>
+    dispatch(loginIn(newUser))
+  )
+  .catch(err =>
+    dispatch(showErr(err))
+  );
 };
