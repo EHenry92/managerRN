@@ -1,9 +1,13 @@
-export const EMAIL_CHANGE = 'email_changed';
+import {EMAIL_CHANGE, PASS_CHANGE} from './types';
 
-
-export const emailChanged = (text) => {
+export const emailChanged = (email) => {
   return {
     type: EMAIL_CHANGE,
-    text
-  }
-}
+    email
+  };
+};
+
+export const passChanged = (password) => ({
+  type: PASS_CHANGE,
+  password
+})
