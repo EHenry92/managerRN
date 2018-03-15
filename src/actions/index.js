@@ -1,4 +1,5 @@
-import {EMAIL_CHANGE, PASS_CHANGE, LOGIN_USER, LOGIN_FAIL} from './types';
+import {EMAIL_CHANGE, PASS_CHANGE, LOGIN_USER, LOGIN_FAIL, LOGIN_IN_PROCESS} from './types';
+import {Actions} from 'react-native-router-flux';
 import firebase from 'firebase';
 
 export const emailChanged = (email) => {
@@ -13,27 +14,26 @@ export const passChanged = (password) => ({
   password
 });
 
-export const loginIn = (user) => ({
-  type: LOGIN_USER,
-  user
+export const loggingin = (dispatch, user) => {
+  dispatch({type: LOGIN_USER, user});
+  //Navigate to employeeList scene
+  Actions.employeeList();
+};
+
+
+export const showErr = () => ({
+  type: LOGIN_FAIL
 });
 
-export const showErr = (err) => ({
-  type: LOGIN_FAIL,
-  err
-})
 
 export const loginUser = ({email, password}) => dispatch => {
+  dispatch({type: LOGIN_IN_PROCESS });
   firebase.auth().signInWithEmailAndPassword(email, password)
-  .then(user =>
-    dispatch(loginIn(user))
-  )
+  .then(user => loggingin(dispatch, user))
   .catch(() => {
-    throw firebase.auth().createUserWithEmailAndPassword(email, password)
+    throw firebase.auth().createUserWithEmailAndPassword(email, password);
   })
-  .then(newUser =>
-    dispatch(loginIn(newUser))
-  )
+  .then(newUser => loggingin(dispatch, newUser))
   .catch(err =>
     dispatch(showErr(err))
   );

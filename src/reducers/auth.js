@@ -1,10 +1,11 @@
-import {EMAIL_CHANGE, PASS_CHANGE, LOGIN_USER, LOGIN_FAIL} from '../actions/types';
+import {EMAIL_CHANGE, PASS_CHANGE, LOGIN_USER, LOGIN_FAIL, LOGIN_IN_PROCESS} from '../actions/types';
 
 const defaultState = {
   email: '',
   password: '',
   user: null,
-  err: null
+  error: '',
+  loading: false
 };
 
 export default (state = defaultState, action) => {
@@ -14,9 +15,18 @@ export default (state = defaultState, action) => {
     case PASS_CHANGE:
       return {...state, password: action.password};
     case LOGIN_USER:
-      return {...state, user: action.user}
+      return {...state, ...defaultState, user: action.user}
     case LOGIN_FAIL:
-      return {...state, error: err}
+      return {...state,
+          error: 'Authentication Failed.',
+          password: '',
+          loading: false
+        }
+    case LOGIN_IN_PROCESS:
+        return {...state,
+          error: '',
+          loading: true
+        }
     default:
       return state;
   }
