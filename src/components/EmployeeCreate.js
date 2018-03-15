@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {employeeUpdate} from '../actions';
+import {employeeUpdate, employeeCreate} from '../actions';
 import {Picker, Text} from 'react-native';
-import {Card, CardSection, InputField, Spinner, Button} from './common';
+import {Card, CardSection, InputField, Button} from './common';
 class EmployeeCreate extends Component {
+  onButtonPress() {
+    const {name, phone, shift} = this.props;
+    this.props.employeeCreate({name, phone, shift: shift || 'Monday'});
+  }
   render (){
     const {name, phone, shift, employeeUpdate} =  this.props;
     return (
@@ -28,7 +32,6 @@ class EmployeeCreate extends Component {
         <CardSection style={{flexDirection: 'column'}}>
           <Text style={styles.pickerLableStyle}>Shift</Text>
           <Picker
-            style = {{flex: 1}}
             selectedValue = {shift}
             onValueChange = {(value) => employeeUpdate({prop:'shift',value})}
             >
@@ -43,7 +46,9 @@ class EmployeeCreate extends Component {
         </CardSection>
 
         <CardSection>
-          <Button>
+          <Button
+            onPress={this.onButtonPress.bind(this)}
+          >
             Create
           </Button>
         </CardSection>
@@ -57,10 +62,10 @@ const styles = {
     fontSize: 18,
     paddingLeft: 20
   }
-}
+};
 const mapState = ({employeeForm}) => {
   const {name, phone, shift} = employeeForm;
   return {name, phone, shift};
-}
+};
 
-export default connect(mapState, {employeeUpdate})(EmployeeCreate);
+export default connect(mapState, {employeeUpdate, employeeCreate})(EmployeeCreate);
