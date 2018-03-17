@@ -31,10 +31,23 @@ export const employeesFetch = () => dispatch => {
     });
 };
 
-export const employeeEdit = ({name, phone, shift, uId}) => dispatch => {
+export const employeeEdit = ({name, phone, shift, uid}) => dispatch => {
   const {currentUser} = firebase.auth();
-  firebase.database().ref(`/users/${currentUser.uid}/employees/${uId}`)
+  firebase.database().ref(`/users/${currentUser.uid}/employees/${uid}`)
   .set({name, phone, shift})
-  .then(Actions.pop());
+  .then(() => {
+    dispatch({type: RESET_FORM});
+    Actions.pop();
+  });
   //Actions.employeeList({type: 'reset'})
 };
+
+export const employeeDelete = ({uid}) => dispatch => {
+  const {currentUser} = firebase.auth();
+  firebase.database().ref(`/users/${currentUser.uid}/employees/${uid}`)
+  .remove()
+  .then(() => {
+    dispatch({type: RESET_FORM});
+    Actions.pop();
+  });
+}
