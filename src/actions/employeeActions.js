@@ -30,3 +30,11 @@ export const employeesFetch = () => dispatch => {
       dispatch({type: EMPLOYEE_FETCH, employees: snapshot.val()});
     });
 };
+
+export const employeeEdit = ({name, phone, shift, uId}) => dispatch => {
+  const {currentUser} = firebase.auth();
+  firebase.database().ref(`/users/${currentUser.uid}/employees/${uId}`)
+  .set({name, phone, shift})
+  .then(Actions.pop());
+  //Actions.employeeList({type: 'reset'})
+};
